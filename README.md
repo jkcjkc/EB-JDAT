@@ -13,7 +13,8 @@ root/
 ├── EB-JDAT-JEM++/
 │   ├── train.sh         # Training script
 │   ├── eval.py         # Test
-│   └── ...├── EB-JDAT-SADAJEM/
+│   └── ...
+├── EB-JDAT-SADAJEM/
 │   ├── train.sh         # Training script
 │   ├── eval.py         # Test
 │   └── ...
