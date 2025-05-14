@@ -21,6 +21,15 @@ root/
 ```
 
 
+## Environment settings and libraries we used in our experiments
+
+* OS: Ubuntu 20.04
+* GPU: RTX 3090
+* CUDA: 12.8
+* Python: 3.9
+* Libraries: see requirements.txt
+
+
 ## Training
 
 To train an EB-JDAT model on any JEM variant:
