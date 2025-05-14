@@ -1,0 +1,16 @@
+foolbox==3.3.3
+GPUtil==1.4.0
+matplotlib==3.10.3
+numpy==1.22.0
+Pillow==11.2.1
+pytorch_image_generation_metrics==0.6.1
+scikit_learn==1.1.2
+scipy==1.15.3
+seaborn==0.13.2
+tensorboardX==2.5.1
+tensorboardX==2.6.2.2
+tensorflow==2.18.0
+torch==2.4.0
+torchmetrics==0.10.2
+torchvision==0.19.0
+tqdm==4.67.1
