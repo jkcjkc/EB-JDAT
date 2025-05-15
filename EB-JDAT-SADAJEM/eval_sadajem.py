@@ -174,8 +174,7 @@ def best_samples(f, replay_buffer, arg, device, out_dir='outputs',
 
     import os
 
-    energy_vector = []
-    energy_vector_xy = []
+
     sqrt = lambda x: int(t.sqrt(t.Tensor([x])))
     plot = lambda p, x: tv.utils.save_image(t.clamp(x, -1, 1), p, normalize=True, nrow=sqrt(x.size(0)))
 
@@ -369,10 +368,8 @@ def PGD_attack(f, args, device):
     for idx, (x, y) in enumerate(tqdm(dload)):
         x, y = x.to(device), y.to(device)
         
-        # 生成对抗样本
         adv_x = attacker(x, y)
         
-        # 评估模型
         with torch.no_grad():
             logits = f.classify(adv_x)
             pred = logits.argmax(dim=1)
@@ -390,10 +387,8 @@ def AA_attack(f, args, device):
     """
     Performs a AA attack on the given model.
     """
-    # 初始化攻击
    
     atk = torchattacks.AutoAttack(f, norm='Linf', eps=8/255, version='standard', n_classes=10, seed=None, verbose=False)
-    # 数据加载
     transform_test = tr.Compose([
         tr.ToTensor(),
         tr.Normalize((.5, .5, .5), (.5, .5, .5)),
@@ -419,9 +414,9 @@ def AA_attack(f, args, device):
     corrects = []
     for x, y in tqdm(dload):
         x, y = x.to(device), y.to(device)
-        # 生成对抗样本
+
         adv_x = atk(x, y)
-        # 评估模型
+    
         with torch.no_grad():
             logits = f.classify(adv_x)
             pred = logits.argmax(dim=1)
@@ -497,8 +492,6 @@ def main(arg):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser("SA-JEM")
     parser.add_argument("--eval", default="test_clf", type=str, choices=["uncond_samples", "cond_samples", "best_samples", "test_clf", "fid",  "gen","PGD","AA"])
-    parser.add_argument("--score_fn", default="px", type=str, choices=["px", "py", "pxgrad"], help="For OODAUC, chooses what score function we use.")
-    parser.add_argument("--ood_dataset", default="svhn", type=str, choices=["svhn", "cifar_interp", "cifar_100", "celeba"], help="Chooses which dataset to compare against for OOD")
     parser.add_argument("--dataset", default="cifar_test", type=str, choices=["cifar_train", "cifar_test", "svhn_test", "svhn_train", "cifar100_test", 'stl10'],
                         help="Dataset to use when running test_clf for classification accuracy")
     parser.add_argument("--datasets", nargs="+", type=str, default=[], help="The datasets you wanna use to generate a log p(x) histogram")
@@ -530,16 +523,6 @@ if __name__ == "__main__":
     parser.add_argument("--fresh_samples", action="store_true", help="If set, then we generate a new replay buffer from scratch for conditional sampling, Will be much slower.")
     parser.add_argument("--gpu-id", type=str, default="")
 
-    #attack
-    parser.add_argument("--epsilon", type=float, default=8/255, help="Maximum perturbation allowed for PGD attack")
-    parser.add_argument("--alpha", type=float, default=0.01, help="Step size for each PGD iteration")
-    parser.add_argument("--num_steps", type=int, default=20, help="Number of PGD iterations")
-    parser.add_argument("--confidence", type=float, default=0.0, help="Confidence for CW attack")
-    parser.add_argument("--cw_lr", type=float, default=0.01, help="Learning rate for CW attack")
-    parser.add_argument("--binary_search_steps", type=int, default=9, help="Binary search steps for CW")
-    parser.add_argument("--cw_max_iter", type=int, default=20, help="Max iterations per step for CW")
-    parser.add_argument("--abort_early", action="store_true", help="Early stopping for CW")
-    parser.add_argument("--initial_const", type=float, default=1e-3, help="Initial const for CW")
 
     args = parser.parse_args()
     assert args.eval != 'gen' or args.n_steps != 0

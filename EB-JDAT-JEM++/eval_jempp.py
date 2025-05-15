@@ -431,9 +431,9 @@ def PGD_attack(f, args, device):
     corrects = []
     for x, y in tqdm(dload):
         x, y = x.to(device), y.to(device)
-        # 生成对抗样本
+      
         adv_x = attacker(x, y)
-        # 评估模型
+    
         with torch.no_grad():
             logits = f.classify(adv_x)
             pred = logits.argmax(dim=1)
@@ -451,10 +451,10 @@ def APGD_attack(f, args, device):
     """
     Performs a PGD attack on the given model.
     """
-    # 初始化攻击
+   
    
     atk=torchattacks.APGD(f, norm='L2', eps=8/255, steps=10, n_restarts=1, seed=0, loss='ce', eot_iter=1, rho=.75, verbose=False)
-    # 数据加载
+  
     transform_test = tr.Compose([
         tr.ToTensor(),
         tr.Normalize((.5, .5, .5), (.5, .5, .5)),
@@ -469,9 +469,9 @@ def APGD_attack(f, args, device):
     corrects = []
     for x, y in tqdm(dload):
         x, y = x.to(device), y.to(device)
-        # 生成对抗样本
+        
         adv_x = atk(x, y)
-        # 评估模型
+       
         with torch.no_grad():
             logits = f.classify(adv_x)
             pred = logits.argmax(dim=1)
@@ -488,10 +488,10 @@ def AA_attack(f, args, device):
     """
     Performs a AA attack on the given model.
     """
-    # 初始化攻击
+   
    
     atk = torchattacks.AutoAttack(f, norm='Linf', eps=8/255, version='standard', n_classes=10, seed=None, verbose=False)
-    # 数据加载
+    
     transform_test = tr.Compose([
         tr.ToTensor(),
         tr.Normalize((.5, .5, .5), (.5, .5, .5)),
@@ -517,9 +517,9 @@ def AA_attack(f, args, device):
     corrects = []
     for x, y in tqdm(dload):
         x, y = x.to(device), y.to(device)
-        # 生成对抗样本
+       
         adv_x = atk(x, y)
-        # 评估模型
+       
         with torch.no_grad():
             logits = f.classify(adv_x)
             pred = logits.argmax(dim=1)
@@ -588,18 +588,11 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser("LDA Energy Based Models")
-    parser.add_argument("--eval", default="OOD", type=str,
+    parser.add_argument("--eval", default="gen", type=str,
                         choices=["uncond_samples", "cond_samples", "gen", "test_clf", "fid","PGD","AA"])
-    parser.add_argument("--score_fn", default="px", type=str,
-                        choices=["px", "py", "pxgrad"], help="For OODAUC, chooses what score function we use.")
-    parser.add_argument("--ood_dataset", default="svhn", type=str,
-                        choices=["svhn", "cifar_interp", "cifar_100", "celeba"],
-                        help="Chooses which dataset to compare against for OOD")
     parser.add_argument("--dataset", default="cifar_test", type=str,
                         choices=["cifar_train", "cifar_test", "svhn_test", "svhn_train", "cifar100_test"],
                         help="Dataset to use when running test_clf for classification accuracy")
-    parser.add_argument("--datasets", nargs="+", type=str, default=["cifar10","cifar100"],
-                        help="The datasets you wanna use to generate a log p(x) histogram")
     # optimization
     parser.add_argument("--batch_size", type=int, default=64)
     # regularization

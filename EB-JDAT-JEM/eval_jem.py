@@ -413,18 +413,18 @@ def PGD_attack(f, args, device):
     """
     Performs a PGD attack on the given model and saves the generated adversarial images.
     """
-    # 初始化攻击
+  
     f = f.to(device).eval()
     attacker = torchattacks.PGD(f, eps=8/255, alpha=1/255, steps=20, random_start=True)
 
-    # 数据加载
+    
     transform_test = tr.Compose([
         tr.ToTensor(),
         tr.Normalize((.5, .5, .5), (.5, .5, .5)),
         lambda x: x + torch.randn_like(x) * args.sigma
     ])
     
-    # 选择数据集
+  
     if args.dataset == "cifar_test":
         dset = tv.datasets.CIFAR10(root="./data/cifar10", transform=transform_test, download=True, train=False)
     elif args.dataset == "cifar100_train":
@@ -442,18 +442,15 @@ def PGD_attack(f, args, device):
 
     dload = DataLoader(dset, batch_size=100, shuffle=False, num_workers=4 if not args.debug else 0)
 
-    # 如果保存文件夹不存在，则创建它
-    if not os.path.exists(save_dir):
-        os.makedirs(save_dir)
 
     corrects = []
     for idx, (x, y) in enumerate(tqdm(dload)):
         x, y = x.to(device), y.to(device)
         
-        # 生成对抗样本
+     
         adv_x = attacker(x, y)
         
-        # 评估模型
+   
         with torch.no_grad():
             logits = f.classify(adv_x)
             pred = logits.argmax(dim=1)
@@ -497,9 +494,9 @@ def AA_attack(f, args, device):
     corrects = []
     for x, y in tqdm(dload):
         x, y = x.to(device), y.to(device)
-        # 生成对抗样本
+ 
         adv_x = atk(x, y)
-        # 评估模型
+
         with torch.no_grad():
             logits = f.classify(adv_x)
             pred = logits.argmax(dim=1)
@@ -561,16 +558,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser("Energy Based Models and Shit")
     parser.add_argument("--eval", default="test_clf", type=str,
                         choices=["test_clf", "gen","fid","PGD","AA"])
-    parser.add_argument("--score_fn", default="px", type=str,
-                        choices=["px", "py", "pxgrad"], help="For OODAUC, chooses what score function we use.")
-    parser.add_argument("--ood_dataset", default="svhn", type=str,
-                        choices=["svhn", "cifar_interp", "cifar_100", "celeba"],
-                        help="Chooses which dataset to compare against for OOD")
     parser.add_argument("--dataset", default="cifar_test", type=str,
                         choices=["cifar_train", "cifar_test", "svhn_test", "svhn_train"],
                         help="Dataset to use when running test_clf for classification accuracy")
-    parser.add_argument("--datasets", nargs="+", type=str, default=[],
-                        help="The datasets you wanna use to generate a log p(x) histogram")
     # optimization
     parser.add_argument("--batch_size", type=int, default=64)
     # regularization

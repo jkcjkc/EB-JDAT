@@ -43,5 +43,5 @@ To train an EB-JDAT model on any JEM variant:
 All evaluation routines are consolidated in the  *eval.py*  file. After training finishes, evaluate your model by running, including clf_test, PGD, AA, gen, FID and so on:
 
 ```
-python eval.py
+./eval.sh
 ```
