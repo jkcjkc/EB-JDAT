@@ -20,7 +20,6 @@ root/
 │   └── ...
 ```
 
-
 ## Environment settings and libraries we used in our experiments
 
 * OS: Ubuntu 20.04
@@ -29,15 +28,15 @@ root/
 * Python: 3.9
 * Libraries: see requirements.txt
 
-
 ## Training
 
 To train an EB-JDAT model on any JEM variant:
 
+*Note that JEM is easy to collapse, and so slow, thus we recommend to train on faster and more stable JEMs, such as JEM++ and SADAJEM.*
+
 ```
 ./train.sh
 ```
-
 
 ## Evaluation
 
