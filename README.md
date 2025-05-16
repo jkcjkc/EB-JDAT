@@ -32,7 +32,7 @@ root/
 
 To train an EB-JDAT model on any JEM variant:
 
-*Note that JEM is easy to collapse, and so slow, thus we recommend to train on faster and more stable JEMs, such as JEM++ and SADAJEM.*
+*Note that JEM is easy to collapse, and so slow,  the learning rate must be set very low to ensure stable training. Thus we recommend to train on faster and more stable JEMs, such as JEM++ and SADAJEM.*
 
 ```
 ./train.sh
