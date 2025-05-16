@@ -1,6 +1,6 @@
 # EB-JDAT
 
-This repository provides the code for **EB-JDAT** implemented across different Joint Energy Models (JEM) variants. Each folder corresponds to a specific JEM architecture with ready-to-use training and evaluation scripts.
+This repository provides the code for **EB-JDAT** implemented across different Joint Energy Models (JEM) variants. Each folder corresponds to a specific JEM architecture with ready-to-use training and evaluation scripts.🚀🚀🚀
 
 ## Directory Structure
 
@@ -32,7 +32,7 @@ root/
 
 To train an EB-JDAT model on any JEM variant:
 
-*Note that JEM is easy to collapse, and so slow,  the learning rate must be set very low to ensure stable training. Thus we recommend to train on faster and more stable JEMs, such as JEM++ and SADAJEM.*
+*Note that JEM is easy to collapse, and so slow,  the learning rate must be set very low to ensure stable training. Thus we recommend to train on faster and more stable JEMs, such as JEM++ and SADAJEM🚀.*
 
 ```
 ./train.sh
